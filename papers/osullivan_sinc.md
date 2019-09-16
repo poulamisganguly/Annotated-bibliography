@@ -1,5 +1,3 @@
-\maketitle
-\tableofcontents
 Review of gridding method
 =========================
 

@@ -1,3 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+\usepackage{tikz,tkz-euclide}
+\usetkzobj{all}
+\usepackage{subfig}
+\usepackage[titles,subfigure]{tocloft}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+ \renewcommand{\familydefault}{\sfdefault}
+\usepackage{lmodern}
+\usepackage{nomencl}
+\makenomenclature
+\usepackage{amssymb}
+\DeclareMathOperator*{\argmin}{argmin}
+\usepackage{amsmath}
+\usepackage{tabu}
+\usepackage[outdir=./]{epstopdf}
+\usepackage[OT2,T1]{fontenc}
+\DeclareSymbolFont{cyrletters}{OT2}{wncyr}{m}{n}
+\DeclareMathSymbol{\Sha}{\mathalpha}{cyrletters}{"58}
+\newcommand\ddfrac[2]{\frac{\displaystyle #1}{\displaystyle #2}}
+\title{Regridding operators and minimum residual filters for Gridrec}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\section{Review of gridding method}
+
+This is a review of the findings of O'Sullivan, 1985 and Jackson et al., 1991. These papers deal with the gridding method and its specific application to tomography. Also, the sinc function is shown to be the ideal interpolation kernel in Fourier domain. 
 \subsection{Gridding method}
 We consider a 2D function in real space $m(x,y)$ whose Fourier transform $M(u,v)$ is given by
 \begin{equation}
@@ -153,3 +195,57 @@ R  = \ddfrac{\iint_A |c(x,y)|^2 w(x,y) dx dy}{\int_{-\infty}^{\infty} \int_{-\in
 \end{equation}
 where $A$ is the region in which $c(x,y)$ should be concentrated and $w(x,y)$ are weight functions. Schwab also showed that $R$ is maximised by zero-order prolate spheroidal wavefunctions, which can be approximated by Kaiser-Bessel window functions.
 
+\section{Application of regridding method to Gridrec}
+The gridding method has been used in tomography to perform direct Fourier inversion from a non-uniformly sampled Fourier domain. The backprojector in such a method corresponds exactly to performing a gridding operation, while the forward projector is a composition of the same operations ``in reverse''.
+
+\subsection{Formulation of the backprojector}
+This is a review of the formulation of the gridding backprojector introduced in Arcadu et al., 2016. Backprojection is done using a series of five operations:
+\begin{enumerate}
+\item 1D Fourier transform of projections: $\hat{P_\theta}(\omega) = \mathcal{F}_{1D}\{P_\theta(t)\}$
+\item Ramp filtering of projections: $\hat{P_\theta}^{(f)}(\omega) = |\omega| \cdot \hat{P_\theta}(\omega)$
+\item Convolution with interpolation kernel: $\hat{f}^{(m)} = \hat{c} \ast \hat{P_\theta}^{(f)}(\omega)$
+\item 2D inverse Fourier transform of the image: $f^{(m)} = \mathcal{F}^{-1}_{2D}\{\hat{f}^{(m)}\}$
+\item Removal of the interpolation kernel (deapodisation): $f = f^m/c$
+\end{enumerate}
+
+We can write down the backprojection operation using the sampling and convolution functions introduced in the previous sections (cf eq.~10):
+\begin{equation}
+f_{SWCSD}(x,y) =  \Bigg[\Big\{\big[f(x,y) \ast [s(x,y) \ast^{-1} \rho(x,y)]\big] \cdot c(x,y)\Big\} \ast \Sha(x,y)\Bigg] \cdot \frac{\Pi(x,y)}{c(x,y)},
+\end{equation}
+where $\Pi(x,y)$ is the boxcar function, $\Pi(x,y) = 1; |x|<1/2,|y|<1/2$, used to crop the reconstruction to the region of interest and $\rho(x,y) = s(x,y) \cdot c(x,y)$ is the inverse Fourier transform of the area density function introduced in (8).
+
+Forward projection is done by applying the operations in reverse. However, ramp filtering, which is done in backprojection to compensate for the non-uniform sampling in the Fourier domain, is not performed. Therefore, we can write down forward projection as:
+{\color{gray}
+\begin{align}
+f_{DSCS}(x,y) &= \Bigg[\Big\{\big[f(x,y) / c(x,y)\big] \cdot \Sha(x,y)\Big\} \cdot c(x,y)\Bigg] \ast s(x,y) \\
+&= \Bigg[\Big\{\big[f(x,y) \cdot \Sha(x,y)\big] / c(x,y) \Big\} \cdot c(x,y)\Bigg] \ast s(x,y) \\
+&= \Bigg[f(x,y) \cdot \Sha(x,y) \Bigg] \ast s(x,y).
+\end{align}
+We see from the equations above, that forward projection can be seen as a sampling of the function by a Shah function $\Sha(x,y)$, followed by resampling onto a different (possibly non-uniform) grid in Fourier space.
+}
+
+\section{Computation of minimum residual filters}
+To compute a minimum residual filter, we first multiply the sinogram data with a basis filter, then apply the backprojection and forward projection operators in succession. We repeat this for all the basis filters and each forward projection forms a column of the matrix G, which we use to minimise the residual and obtain an optimum filter:
+\begin{equation}
+h^\ast = \text{argmin}_h ||Gh - P||^2_2.
+\end{equation}
+Therefore, $G$ can be written as a composition of filtering, backprojection and forward projection, i.e.
+\begin{equation}
+G = W_G W^T_G C_h,
+\end{equation}
+where $W^T_G$ denotes the Gridrec backprojection operator, $W_G$ denotes the forward projection operator and $C_h$ denotes convolution (in real space) with a filter $h$. 
+
+{\color{gray}
+If the sinc kernel had been used for interpolation in Fourier domain, we would not need to perform any deapodisation. This would imply that we would not need to go through image space to compute the action of $W_G W^T_G$.  
+
+We now want to explore what would happen if we did not do any deapodisation in image space even when it is necessary. Without deapodisation, from (42), we have
+\begin{equation}
+f_{SWCS}(x,y) = f_{SWCSD}(x,y) \cdot c(x,y) = \Big\{\big[f(x,y) \ast [s(x,y) \ast^{-1} \rho(x,y)]\big] \cdot c(x,y)\Big\} \ast \Sha(x,y).
+\end{equation}
+Plugging this expression into the forward projection equation, i.e. (45), we get
+\begin{equation}
+f_{DSCS}(x,y) = \Bigg[\Big\{f_{SWCSD}(x,y) \cdot c(x,y)\Big\}\cdot \Sha(x,y) \Bigg] \ast s(x,y).
+\end{equation}
+From the last equation, we see that the effect of the interpolation kernel $c(x,y)$ is present in the forward projection. Therefore, we cannot use this forward projection to minimise the residual w.r.t.~the actual data. However, as the operations performed in (49) are simply sampling operations, we could deapodise after the forward projection, to remove the contribution of $c(x,y)$.
+}
+\end{document}

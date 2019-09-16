@@ -1,0 +1,124 @@
+html {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background: #FEFEFE;
+}
+
+body {
+  color: #333;
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+}
+
+#header {
+  background-color: #f44336;
+  color: white;
+  font-size: 24pt;
+  font-weight: bold;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  text-align: center;
+}
+
+#header a {
+  color: white;
+  text-decoration: none;
+}
+
+#container {
+  padding-left: 1em;
+  padding-right: 1em;
+  max-width: 44em;
+  line-height: 27px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media screen and (min-width: 600px) {
+  #container {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+}
+
+#indextitle {
+  font-size: 60pt;
+  margin-top: 0pt;
+  margin-bottom: 0pt;
+}
+
+.year {
+  color: gray;
+}
+
+a { text-decoration: none; }
+h1 a:link, h1 a:visited { color: #222; }
+h1 a:active, h1 a:hover { color: #444; }
+#paperlist a:link, #paperlist a:visited { color: #222; }
+#paperlist a:active, #paperlist a:hover { color: #444; }
+
+h1 {
+  line-height: 1;
+  margin-top: 0em;
+  margin-bottom: 0.55em;
+}
+
+h2 {
+  margin-top: 0.9em;
+  margin-bottom: 0.45em;
+}
+
+h3 {
+  margin-top: 0.8em;
+  margin-bottom: 0.35em;
+}
+
+h4 {
+  margin-top: 0.7em;
+  margin-bottom: 0.25em;
+}
+
+p {
+  margin-top: 0em;
+  margin-bottom: 1.15em;
+}
+
+pre {
+  margin-top: 0em;
+  margin-bottom: 1.15em;
+  background-color: #f7f7f7;
+  overflow: auto;
+  padding: 5pt;
+}
+
+@media screen and (min-width: 600px) {
+  pre {
+    padding: 16pt;
+  }
+}
+
+code {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+table {
+  margin-bottom: 1.15em;
+  border-collapse: collapse;
+}
+
+td, th {
+  padding: 2pt;
+  border: 1.25pt solid gray;
+}
+
+blockquote {
+  padding-left: 1em;
+  color: #777;
+  border-left: 0.25em solid #ddd;
+}
+
+.math {
+  overflow: auto;
+}

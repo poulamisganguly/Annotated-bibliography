@@ -1,19 +1,23 @@
-# [A Fast Sinc Function Gridding Algorithm or Fourier Inversion in Computer Tomography (1985)](https://ieeexplore.ieee.org/abstract/document/4307723)
+# [A Fast Sinc Function Gridding Algorithm for Fourier Inversion in Computer Tomography (1985)](https://ieeexplore.ieee.org/abstract/document/4307723)
 
 ## Summary
 
 ### Gridding method
 
-We consider a 2D function in real space $m(x,y)$ whose Fourier transform $M(u,v)$ is given by
+We consider a 2D function in real space $$m(x,y)$$ whose Fourier transform $$M(u,v)$$ is given by
+$$
 \begin{equation}
 M(u,v) = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} m(x,y) e^{2\pi i (ux+vy)} dx dy.
 \end{equation}
+$$
 In the tomography case, $M(u,v)$ is the Fourier transform of the image we want to reconstruct.
 
 We also define a sampling function $S(u,v)$ in Fourier space, which is given by
+$$
 \begin{equation}
 S(u,v) = \sum_{j=i}^{k} \delta(u-u_j, v-v_j).
 \end{equation}
+$$
 The 2D delta function in the equation above \emph{samples} a function at points $(u_j, v_j)$, which form any grid (i.e.~not necessarily Cartesian) in Fourier space. If we multiply this function to $M(u,v)$, we get a sampled Fourier transform
 \begin{equation}
 M_S(u,v) = M(u,v) \cdot S(u,v).

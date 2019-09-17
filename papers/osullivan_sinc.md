@@ -23,19 +23,19 @@ Fourier space. If we multiply this function to $M(u,v)$, we get a
 sampled Fourier transform $$M_S(u,v) = M(u,v) \cdot S(u,v).$$ The fist
 step of the gridding method is to convolve the sampled Fourier transform
 with a suitable kernel $C(u,v)$:
-$$M_{SC}(u,v) = [M(u,v) \cdot S(u,v)] \ast C(u,v),$$ where the
+$$M_{SC}(u,v) = (M(u,v) \cdot S(u,v)) \ast C(u,v),$$ where the
 subscripts in $M_{SC}(u,v)$ denote the operations sampling and
 convolution, respectively.
 
 Next, the convolution shown above is sampled at Cartesian points
-$$M_{SCS}(u,v) = \{[M(u,v) \cdot S(u,v)] \ast C(u,v)\} \cdot \Sha(u,v),$$
+$$M_{SCS}(u,v) = \{(M(u,v) \cdot S(u,v)) \ast C(u,v)\} \cdot \Sha(u,v),$$
 where $\Sha(u,v)$ denotes the Shah or comb function
 $$\Sha(u,v) = \sum_{k} \sum_{j} \delta(u-k,v-j),$$ which samples points
 $(k,j)$ that are equally spaced.
 
 The reconstructed image $m_{SCS}(x,y)$ is given by the 2D inverse
 Fourier transform of $M_{SCS}(u,v)$. Therefore,
-$$m_{SCS}(x,y) = \{[m(x,y) \ast s(x,y)] \cdot c(x,y)\} \ast \Sha(x,y)$$
+$$m_{SCS}(x,y) = \{(m(x,y) \ast s(x,y)) \cdot c(x,y)\} \ast \Sha(x,y)$$
 
 If the Fourier transform $M(u,v)$ is not sufficiently sampled by
 $S(u,v)$, we cannot correct the aliasing of $m(x,y)$ via
@@ -45,9 +45,9 @@ density function given by $$\rho(u,v) = S(u,v) \ast C(u,v).$$ Areas that
 are oversampled have a large area density while those that are
 undersampled have a small area density. Including this contribution in
 (5), we get a sampled and weighted function
-$$M_{SWCS}(u,v) = \Bigg\{\Bigg[M(u,v) \cdot \frac{S(u,v)}{S(u,v) \ast C(u,v)}\Bigg] \ast C(u,v)\Bigg\} \cdot \Sha(u,v)$$
+$$M_{SWCS}(u,v) = \{\Bigg\{\Bigg(M(u,v) \cdot \frac{S(u,v)}{S(u,v) \ast C(u,v)}\Bigg) \ast C(u,v)\Bigg\}\} \cdot \Sha(u,v)$$
 and its corresponding inverse Fourier transform
-$$m_{SWCS}(x,y) =  \{[m(x,y) \ast [s(x,y) \ast^{-1} (s(x,y) \cdot c(x,y))]] \cdot c(x,y)\} \ast \Sha(x,y),$$
+$$m_{SWCS}(x,y) =  \{(m(x,y) \ast (s(x,y) \ast^{-1} (s(x,y) \cdot c(x,y)))) \cdot c(x,y)\} \ast \Sha(x,y),$$
 where $\ast^{-1}$ denotes deconvolution.
 
 The question that presents itself at this stage is how to choose a
@@ -80,13 +80,13 @@ The function we want to reconstruct, $m(x,y)$, has compact support. We
 define its support such that $m(x,y) = 0$ for $x>|x_0|$ or $y>|y_0|$. We
 make use of the Whittaker-Shannon interpolation formula, which is a
 method to reconstruct a continuous time, bandlimited function from a
-sequence of real numbers. Given $x[n] = x(nT)$, a sequence of real
+sequence of real numbers. Given $x(n) = x(nT)$, a sequence of real
 numbers with sampling period $T$, the formula states that
-$$x(t) = \sum_n x[n] \text{ sinc}\Bigg( \frac{t-nT}{T}\Bigg)$$ is a
+$$x(t) = \sum_n x(n) \text{ sinc}\Bigg( \frac{t-nT}{T}\Bigg)$$ is a
 perfect reconstruction of the original function $x(t)$ if the bandlimit
 of the function, $B$, is less than the Nyquist frequency,
 $\frac{1}{2T}$. The reconstruction is equivalently given by
-$$x(t) = \Bigg(\sum_n x[n] \cdot \delta(t-nT)\Bigg) \ast \text{ sinc}\Bigg( \frac{t}{T}\Bigg).$$
+$$x(t) = \Bigg(\sum_n x(n) \cdot \delta(t-nT)\Bigg) \ast \text{ sinc}\Bigg( \frac{t}{T}\Bigg).$$
 The function we want to reconstruct, $m(x,y)$, has compact support in
 real space and its limits are given by $(x \leq x_0, y \leq y_0)$.
 Therefore, we can reconstruct it perfectly by multiplying its sampled
@@ -197,7 +197,7 @@ of five operations:
 
 We can write down the backprojection operation using the sampling and
 convolution functions introduced in the previous sections (cf eq. 10):
-$$f_{SWCSD}(x,y) =  \Bigg[\Big\{\big[f(x,y) \ast [s(x,y) \ast^{-1} \rho(x,y)]\big] \cdot c(x,y)\Big\} \ast \Sha(x,y)\Bigg] \cdot \frac{\Pi(x,y)}{c(x,y)},$$
+$$f_{SWCSD}(x,y) =  \Bigg(\Big\{\big(f(x,y) \ast (s(x,y) \ast^{-1} \rho(x,y))\big) \cdot c(x,y)\Big\} \ast \Sha(x,y)\Bigg) \cdot \frac{\Pi(x,y)}{c(x,y)},$$
 where $\Pi(x,y)$ is the boxcar function,
 $\Pi(x,y) = 1; |x|<1/2,|y|<1/2$, used to crop the reconstruction to the
 region of interest and $\rho(x,y) = s(x,y) \cdot c(x,y)$ is the inverse
@@ -207,9 +207,9 @@ Forward projection is done by applying the operations in reverse.
 However, ramp filtering, which is done in backprojection to compensate
 for the non-uniform sampling in the Fourier domain, is not performed.
 Therefore, we can write down forward projection as: $$\begin{aligned}
-f_{DSCS}(x,y) &= \Bigg[\Big\{\big[f(x,y) / c(x,y)\big] \cdot \Sha(x,y)\Big\} \cdot c(x,y)\Bigg] \ast s(x,y) \\
-&= \Bigg[\Big\{\big[f(x,y) \cdot \Sha(x,y)\big] / c(x,y) \Big\} \cdot c(x,y)\Bigg] \ast s(x,y) \\
-&= \Bigg[f(x,y) \cdot \Sha(x,y) \Bigg] \ast s(x,y).\end{aligned}$$ We
+f_{DSCS}(x,y) &= \Bigg(\Big\{\big(f(x,y) / c(x,y)\big) \cdot \Sha(x,y)\Big\} \cdot c(x,y)\Bigg) \ast s(x,y) \\
+&= \Bigg(\Big\{\big(f(x,y) \cdot \Sha(x,y)\big) / c(x,y) \Big\} \cdot c(x,y)\Bigg) \ast s(x,y) \\
+&= \Bigg(f(x,y) \cdot \Sha(x,y) \Bigg) \ast s(x,y).\end{aligned}$$ We
 see from the equations above, that forward projection can be seen as a
 sampling of the function by a Shah function $\Sha(x,y)$, followed by
 resampling onto a different (possibly non-uniform) grid in Fourier
@@ -239,10 +239,10 @@ $W_G W^T_G$.
 We now want to explore what would happen if we did not do any
 deapodisation in image space even when it is necessary. Without
 deapodisation, from (42), we have
-$$f_{SWCS}(x,y) = f_{SWCSD}(x,y) \cdot c(x,y) = \Big\{\big[f(x,y) \ast [s(x,y) \ast^{-1} \rho(x,y)]\big] \cdot c(x,y)\Big\} \ast \Sha(x,y).$$
+$$f_{SWCS}(x,y) = f_{SWCSD}(x,y) \cdot c(x,y) = \Big\{\big(f(x,y) \ast (s(x,y) \ast^{-1} \rho(x,y))\big) \cdot c(x,y)\Big\} \ast \Sha(x,y).$$
 Plugging this expression into the forward projection equation, i.e.
 (45), we get
-$$f_{DSCS}(x,y) = \Bigg[\Big\{f_{SWCSD}(x,y) \cdot c(x,y)\Big\}\cdot \Sha(x,y) \Bigg] \ast s(x,y).$$
+$$f_{DSCS}(x,y) = \Bigg(\Big\{f_{SWCSD}(x,y) \cdot c(x,y)\Big\}\cdot \Sha(x,y) \Bigg) \ast s(x,y).$$
 From the last equation, we see that the effect of the interpolation
 kernel $c(x,y)$ is present in the forward projection. Therefore, we
 cannot use this forward projection to minimise the residual w.r.t. the

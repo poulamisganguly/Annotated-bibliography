@@ -215,41 +215,6 @@ sampling of the function by a Shah function $\Sha(x,y)$, followed by
 resampling onto a different (possibly non-uniform) grid in Fourier
 space.
 
-Computation of minimum residual filters
-=======================================
-
-To compute a minimum residual filter, we first multiply the sinogram
-data with a basis filter, then apply the backprojection and forward
-projection operators in succession. We repeat this for all the basis
-filters and each forward projection forms a column of the matrix G,
-which we use to minimise the residual and obtain an optimum filter:
-$$h^\ast = \text{argmin}_h ||Gh - P||^2_2.$$ Therefore, $G$ can be
-written as a composition of filtering, backprojection and forward
-projection, i.e. $$G = W_G W^T_G C_h,$$ where $W^T_G$ denotes the
-Gridrec backprojection operator, $W_G$ denotes the forward projection
-operator and $C_h$ denotes convolution (in real space) with a filter
-$h$.
-
-\color{gray}
-If the sinc kernel had been used for interpolation in Fourier domain, we
-would not need to perform any deapodisation. This would imply that we
-would not need to go through image space to compute the action of
-$W_G W^T_G$.
-
-We now want to explore what would happen if we did not do any
-deapodisation in image space even when it is necessary. Without
-deapodisation, from (42), we have
-$$f_{SWCS}(x,y) = f_{SWCSD}(x,y) \cdot c(x,y) = \Big\{\big(f(x,y) \ast (s(x,y) \ast^{-1} \rho(x,y))\big) \cdot c(x,y)\Big\} \ast \Sha(x,y).$$
-Plugging this expression into the forward projection equation, i.e.
-(45), we get
-$$f_{DSCS}(x,y) = \Bigg(\Big\{f_{SWCSD}(x,y) \cdot c(x,y)\Big\}\cdot \Sha(x,y) \Bigg) \ast s(x,y).$$
-From the last equation, we see that the effect of the interpolation
-kernel $c(x,y)$ is present in the forward projection. Therefore, we
-cannot use this forward projection to minimise the residual w.r.t. the
-actual data. However, as the operations performed in (49) are simply
-sampling operations, we could deapodise after the forward projection, to
-remove the contribution of $c(x,y)$.
-
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>

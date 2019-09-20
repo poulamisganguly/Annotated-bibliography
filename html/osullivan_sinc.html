@@ -1,42 +1,21 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>osullivan_sinc</title>
+  <title>Annotated bibliography</title>
   <link href='../css/style.css' rel='stylesheet'>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
+  <meta name=viewport content="width=device-width, initial-scale=1">
 </head>
+
 <body>
-<body>
-  <div id=header>Annotated bibliography</div>
-<nav id="TOC">
-<ul>
-<li><a href="#review-of-gridding-method">Review of gridding method</a><ul>
-<li><a href="#gridding-method">Gridding method</a></li>
-<li><a href="#ideal-interpolation">Ideal interpolation</a></li>
-<li><a href="#finite-kernel">Finite kernel</a></li>
-</ul></li>
-<li><a href="#application-of-regridding-method-to-gridrec">Application of regridding method to Gridrec</a><ul>
-<li><a href="#formulation-of-the-backprojector">Formulation of the backprojector</a></li>
-</ul></li>
-</ul>
-</nav>
+  <div id=header>
+    <a href="../">Annotated bibliography</a>
+  </div>
+  <div id="container">
 <h1 id="review-of-gridding-method">Review of gridding method</h1>
-<p>This is a review of the findings of O’Sullivan, 1985 and Jackson et al., 1991. These papers deal with the gridding method and its specific application to tomography. Also, the sinc function is shown to be the ideal interpolation kernel in Fourier domain.</p>
+<p>This is a review of the findings of O&#8217;Sullivan, 1985 and Jackson et al., 1991. These papers deal with the gridding method and its specific application to tomography. Also, the sinc function is shown to be the ideal interpolation kernel in Fourier domain.</p>
 <h2 id="gridding-method">Gridding method</h2>
 <p>We consider a 2D function in real space <span class="math inline">\(m(x,y)\)</span> whose Fourier transform <span class="math inline">\(M(u,v)\)</span> is given by <span class="math display">\[M(u,v) = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} m(x,y) e^{2\pi i (ux+vy)} dx dy.\]</span> In the tomography case, <span class="math inline">\(M(u,v)\)</span> is the Fourier transform of the image we want to reconstruct.</p>
-<p>We also define a sampling function <span class="math inline">\(S(u,v)\)</span> in Fourier space, which is given by <span class="math display">\[S(u,v) = \sum_{j=i}^{k} \delta(u-u_j, v-v_j).\]</span> The 2D delta function in the equation above <em>samples</em> a function at points <span class="math inline">\((u_j, v_j)\)</span>, which form any grid (i.e. not necessarily Cartesian) in Fourier space. If we multiply this function to <span class="math inline">\(M(u,v)\)</span>, we get a sampled Fourier transform <span class="math display">\[M_S(u,v) = M(u,v) \cdot S(u,v).\]</span> The fist step of the gridding method is to convolve the sampled Fourier transform with a suitable kernel <span class="math inline">\(C(u,v)\)</span>: <span class="math display">\[M_{SC}(u,v) = (M(u,v) \cdot S(u,v)) \ast C(u,v),\]</span> where the subscripts in <span class="math inline">\(M_{SC}(u,v)\)</span> denote the operations sampling and convolution, respectively.</p>
+<p>We also define a sampling function <span class="math inline">\(S(u,v)\)</span> in Fourier space, which is given by <span class="math display">\[S(u,v) = \sum_{j=i}^{k} \delta(u-u_j, v-v_j).\]</span> The 2D delta function in the equation above <em>samples</em> a function at points <span class="math inline">\((u_j, v_j)\)</span>, which form any grid (i.e.&#160;not necessarily Cartesian) in Fourier space. If we multiply this function to <span class="math inline">\(M(u,v)\)</span>, we get a sampled Fourier transform <span class="math display">\[M_S(u,v) = M(u,v) \cdot S(u,v).\]</span> The fist step of the gridding method is to convolve the sampled Fourier transform with a suitable kernel <span class="math inline">\(C(u,v)\)</span>: <span class="math display">\[M_{SC}(u,v) = (M(u,v) \cdot S(u,v)) \ast C(u,v),\]</span> where the subscripts in <span class="math inline">\(M_{SC}(u,v)\)</span> denote the operations sampling and convolution, respectively.</p>
 <p>Next, the convolution shown above is sampled at Cartesian points <span class="math display">\[M_{SCS}(u,v) = \{(M(u,v) \cdot S(u,v)) \ast C(u,v)\} \cdot \Sha(u,v),\]</span> where <span class="math inline">\(\Sha(u,v)\)</span> denotes the Shah or comb function <span class="math display">\[\Sha(u,v) = \sum_{k} \sum_{j} \delta(u-k,v-j),\]</span> which samples points <span class="math inline">\((k,j)\)</span> that are equally spaced.</p>
 <p>The reconstructed image <span class="math inline">\(m_{SCS}(x,y)\)</span> is given by the 2D inverse Fourier transform of <span class="math inline">\(M_{SCS}(u,v)\)</span>. Therefore, <span class="math display">\[m_{SCS}(x,y) = \{(m(x,y) \ast s(x,y)) \cdot c(x,y)\} \ast \Sha(x,y)\]</span></p>
 <p>If the Fourier transform <span class="math inline">\(M(u,v)\)</span> is not sufficiently sampled by <span class="math inline">\(S(u,v)\)</span>, we cannot correct the aliasing of <span class="math inline">\(m(x,y)\)</span> via post-processing. However, we can add an additional correction for non-uniform sampling in Fourier space. For this, we consider an area density function given by <span class="math display">\[\rho(u,v) = S(u,v) \ast C(u,v).\]</span> Areas that are oversampled have a large area density while those that are undersampled have a small area density. Including this contribution in (5), we get a sampled and weighted function <span class="math display">\[M_{SWCS}(u,v) = \{\Bigg\{\Bigg(M(u,v) \cdot \frac{S(u,v)}{S(u,v) \ast C(u,v)}\Bigg) \ast C(u,v)\Bigg\}\} \cdot \Sha(u,v)\]</span> and its corresponding inverse Fourier transform <span class="math display">\[m_{SWCS}(x,y) =  \{(m(x,y) \ast (s(x,y) \ast^{-1} (s(x,y) \cdot c(x,y)))) \cdot c(x,y)\} \ast \Sha(x,y),\]</span> where <span class="math inline">\(\ast^{-1}\)</span> denotes deconvolution.</p>
@@ -66,7 +45,7 @@ m_e(x,y) - m_{S}(x,y) &amp;= \frac{m_{SCS}(x,y)}{c(x,y)} - m_{S}(x,y) \\
 &amp;= \frac{1}{c(x,y)}\sum_{j\neq0} \sum_{k\neq0} m_{S}\Bigg(x - \frac{k}{u_1}, y - \frac{j}{v_1} \Bigg) \cdot c\Bigg( x - \frac{k}{u_1}, y - \frac{j}{v_1}\Bigg)\end{aligned}\]</span></p>
 <p>The accuracy of the gridding method depends on the rate of decay of <span class="math inline">\(c(x,y)\)</span> outside the region of interest (<span class="math inline">\(|x| \leq x_1, |y| \leq y_1\)</span>). An optimality criterion for the selection of a suitable kernel was proposed by Schwab in a 1983 paper: <span class="math display">\[R  = \frac{\displaystyle \iint_A |c(x,y)|^2 w(x,y) dx dy}{\displaystyle \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} |c(x,y)|^2 w(x,y) dx dy},\]</span> where <span class="math inline">\(A\)</span> is the region in which <span class="math inline">\(c(x,y)\)</span> should be concentrated and <span class="math inline">\(w(x,y)\)</span> are weight functions. Schwab also showed that <span class="math inline">\(R\)</span> is maximised by zero-order prolate spheroidal wavefunctions, which can be approximated by Kaiser-Bessel window functions.</p>
 <h1 id="application-of-regridding-method-to-gridrec">Application of regridding method to Gridrec</h1>
-<p>The gridding method has been used in tomography to perform direct Fourier inversion from a non-uniformly sampled Fourier domain. The backprojector in such a method corresponds exactly to performing a gridding operation, while the forward projector is a composition of the same operations “in reverse”.</p>
+<p>The gridding method has been used in tomography to perform direct Fourier inversion from a non-uniformly sampled Fourier domain. The backprojector in such a method corresponds exactly to performing a gridding operation, while the forward projector is a composition of the same operations &#8220;in reverse&#8221;.</p>
 <h2 id="formulation-of-the-backprojector">Formulation of the backprojector</h2>
 <p>This is a review of the formulation of the gridding backprojector introduced in Arcadu et al., 2016. Backprojection is done using a series of five operations:</p>
 <ol type="1">
@@ -76,7 +55,7 @@ m_e(x,y) - m_{S}(x,y) &amp;= \frac{m_{SCS}(x,y)}{c(x,y)} - m_{S}(x,y) \\
 <li><p>2D inverse Fourier transform of the image: <span class="math inline">\(f^{(m)} = \mathcal{F}^{-1}_{2D}\{\hat{f}^{(m)}\}\)</span></p></li>
 <li><p>Removal of the interpolation kernel (deapodisation): <span class="math inline">\(f = f^m/c\)</span></p></li>
 </ol>
-<p>We can write down the backprojection operation using the sampling and convolution functions introduced in the previous sections (cf eq. 10): <span class="math display">\[f_{SWCSD}(x,y) =  \Bigg(\Big\{\big(f(x,y) \ast (s(x,y) \ast^{-1} \rho(x,y))\big) \cdot c(x,y)\Big\} \ast \Sha(x,y)\Bigg) \cdot \frac{\Pi(x,y)}{c(x,y)},\]</span> where <span class="math inline">\(\Pi(x,y)\)</span> is the boxcar function, <span class="math inline">\(\Pi(x,y) = 1; |x|&lt;1/2,|y|&lt;1/2\)</span>, used to crop the reconstruction to the region of interest and <span class="math inline">\(\rho(x,y) = s(x,y) \cdot c(x,y)\)</span> is the inverse Fourier transform of the area density function introduced in (8).</p>
+<p>We can write down the backprojection operation using the sampling and convolution functions introduced in the previous sections (cf eq.&#160;10): <span class="math display">\[f_{SWCSD}(x,y) =  \Bigg(\Big\{\big(f(x,y) \ast (s(x,y) \ast^{-1} \rho(x,y))\big) \cdot c(x,y)\Big\} \ast \Sha(x,y)\Bigg) \cdot \frac{\Pi(x,y)}{c(x,y)},\]</span> where <span class="math inline">\(\Pi(x,y)\)</span> is the boxcar function, <span class="math inline">\(\Pi(x,y) = 1; |x|&lt;1/2,|y|&lt;1/2\)</span>, used to crop the reconstruction to the region of interest and <span class="math inline">\(\rho(x,y) = s(x,y) \cdot c(x,y)\)</span> is the inverse Fourier transform of the area density function introduced in (8).</p>
 <p>Forward projection is done by applying the operations in reverse. However, ramp filtering, which is done in backprojection to compensate for the non-uniform sampling in the Fourier domain, is not performed. Therefore, we can write down forward projection as: <span class="math display">\[\begin{aligned}
 f_{DSCS}(x,y) &amp;= \Bigg(\Big\{\big(f(x,y) / c(x,y)\big) \cdot \Sha(x,y)\Big\} \cdot c(x,y)\Bigg) \ast s(x,y) \\
 &amp;= \Bigg(\Big\{\big(f(x,y) \cdot \Sha(x,y)\big) / c(x,y) \Big\} \cdot c(x,y)\Bigg) \ast s(x,y) \\
@@ -84,5 +63,17 @@ f_{DSCS}(x,y) &amp;= \Bigg(\Big\{\big(f(x,y) / c(x,y)\big) \cdot \Sha(x,y)\Big\}
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
+  </div>
+
+  <script type="text/javascript" src="../js/mathjax_config.js"></script>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-90310997-2', 'auto');
+		ga('send', 'pageview');
+	</script>
 </body>
 </html>

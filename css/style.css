@@ -1,6 +1,6 @@
 html {
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-  background: #FEFEFE;
+  font-family: "Source Sans Pro", "Arial", sans-serif;
+  background: #faf6e6;
 }
 
 body {
@@ -11,12 +11,12 @@ body {
 }
 
 #header {
-  background-color: #f44336;
+  background-color: #7bccc4;
   color: white;
-  font-size: 24pt;
+  font-size: 30pt;
   font-weight: bold;
-  padding-bottom: 10px;
-  padding-top: 10px;
+  padding-bottom: 20px;
+  padding-top: 20px;
   text-align: center;
 }
 
